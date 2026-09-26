@@ -140,13 +140,63 @@ Review theo cả chuỗi (sequence), không chấm từng frame độc lập —
 
 ## 9. Examples (5 edge case chính, kèm ảnh minh hoạ)
 
-| # | Tình huống | Quyết định | Ảnh minh hoạ |
-|---|---|---|---|
-| 1 | Ngã tư có cả đèn tín hiệu và cảnh sát/người điều khiển giao thông đang ra hiệu lệnh (ảnh gốc `11.png`) | **LABEL** đèn theo đúng `state` đang sáng, nhưng `relevance=not_relevant` — người lái phải theo hiệu lệnh người điều khiển giao thông thay vì đèn | <img src="../data/data_team/11.png" width="600"><br>*(ảnh gốc, chưa có bbox — bổ sung ảnh đã gán nhãn từ CVAT sau)* |
-| 2 | Cùng một hướng đi có từ 2 đèn trở lên (đèn chính + đèn lặp lại, ví dụ một treo trái một treo phải) — `TEAM01`, ảnh gốc `1.png` | **LABEL** riêng từng đèn, mỗi đèn 1 box; các đèn cùng hướng phải cùng `state` và cùng `relevance` với xe mình. Lý do: các đèn này cùng điều khiển một hướng nên luôn đổi màu cùng lúc — nếu hai đèn khác màu hoặc khác relevance thì có một đèn bị gán sai | <img src="guideline_images/case02_TEAM01_same_direction.png" width="600"><br>*(đã gán nhãn trên CVAT — 1 đèn treo bên trái, 1 đèn trên cần đèn bên phải, cùng hướng)* |
-| 3 | Hộp đèn tối, không phát sáng: **(a)** đèn đang được sửa chữa — có xe cẩu và công nhân làm việc ngay dưới giàn đèn (ảnh gốc `24.png`); **(b)** đèn chưa được lắp đặt — cụm đèn trên rơ-moóc đang được chở tới nơi lắp đặt (`TEAM25`, ảnh gốc `29.png`) | **LABEL** — vẫn vẽ bbox quanh vỏ đèn và gán `state=off`. Chỉ dùng `unknown` khi không nhìn rõ được (bị che, quá xa, quá mờ). Với (b), đèn không điều khiển giao thông tại vị trí đó nên `relevance=not_relevant`. Lý do: đèn tắt là một trạng thái thật, khác với "không biết màu" — không tự đoán màu cho đèn tắt | <img src="guideline_images/case03a_maintenance_off.png" width="600"><br>*(a) đã gán nhãn trên CVAT*<br><img src="guideline_images/case03b_trailer_off.png" width="600"><br>*(b) đã gán nhãn trên CVAT* |
-| 4 | Đèn bị đổi màu khi thu vào camera — màu hiển thị trên ảnh khác với các màu tín hiệu (đỏ, vàng, xanh), ví dụ ban đêm đèn ngả sang xanh dương/xanh ngọc | **LABEL** — vẫn vẽ box, vẫn là `traffic_light`, nhưng `state=unknown` và `evidence` ghi rõ "màu bị camera làm lệch". Lý do: màu hiển thị không đủ để xác định đèn đang ở trạng thái nào | *(đang chờ chọn ảnh — xem ghi chú về ảnh `17.png`)* |
-| 5 | Giao lộ có ≥2 cột: 1 cho làn ego, 1 cho làn cắt ngang — `TEAM04`, ảnh gốc `4.png` | **LABEL** cả 2, `relevance` khác nhau theo làn ego — **critical** | <img src="guideline_images/case06_TEAM04_multi_pole.png" width="600"><br>*(đã gán nhãn trên CVAT)* |
+| # | Tình huống | Quyết định |
+|---|---|---|
+| 1 | Ngã tư có cả đèn tín hiệu và cảnh sát/người điều khiển giao thông đang ra hiệu lệnh (ảnh gốc `11.png`) | **LABEL** đèn theo đúng `state` đang sáng, nhưng `relevance=not_relevant` — người lái phải theo hiệu lệnh người điều khiển giao thông thay vì đèn |
+| 2 | Cùng một hướng đi có từ 2 đèn trở lên (đèn chính + đèn lặp lại, ví dụ một treo trái một treo phải) — `TEAM01`, ảnh gốc `1.png` | **LABEL** riêng từng đèn, mỗi đèn 1 box; các đèn cùng hướng phải cùng `state` và cùng `relevance` với xe mình. Lý do: các đèn này cùng điều khiển một hướng nên luôn đổi màu cùng lúc — nếu hai đèn khác màu hoặc khác relevance thì có một đèn bị gán sai |
+| 3 | Hộp đèn tối, không phát sáng: **(a)** đèn đang được sửa chữa — có xe cẩu và công nhân làm việc ngay dưới giàn đèn (ảnh gốc `24.png`); **(b)** đèn chưa được lắp đặt — cụm đèn trên rơ-moóc đang được chở tới nơi lắp đặt (`TEAM25`, ảnh gốc `29.png`) | **LABEL** — vẫn vẽ bbox quanh vỏ đèn và gán `state=off`. Chỉ dùng `unknown` khi không nhìn rõ được (bị che, quá xa, quá mờ). Với (b), đèn không điều khiển giao thông tại vị trí đó nên `relevance=not_relevant`. Lý do: đèn tắt là một trạng thái thật, khác với "không biết màu" — không tự đoán màu cho đèn tắt |
+| 4 | Đèn bị đổi màu khi thu vào camera — màu hiển thị trên ảnh khác với các màu tín hiệu (đỏ, vàng, xanh), ví dụ ban đêm đèn ngả sang xanh dương/xanh ngọc | **LABEL** — vẫn vẽ box, vẫn là `traffic_light`, nhưng `state=unknown` và `evidence` ghi rõ "màu bị camera làm lệch". Lý do: màu hiển thị không đủ để xác định đèn đang ở trạng thái nào |
+| 5 | Giao lộ có ≥2 cột: 1 cho làn ego, 1 cho làn cắt ngang — `TEAM04`, ảnh gốc `4.png` | **LABEL** cả 2, `relevance` khác nhau theo làn ego — **critical** |
+
+### Ảnh case 1 — Cảnh sát điều khiển giao thông
+
+- **Tình huống:** Ngã tư có cả đèn tín hiệu và cảnh sát/người điều khiển giao thông đang ra hiệu lệnh (ảnh gốc `11.png`).
+- **Cách gán:** **LABEL** đèn theo đúng `state` đang sáng (bị che khuất thì `state=unknown`), nhưng `relevance=not_relevant`.
+- **Lý do:** Người lái phải theo hiệu lệnh của người điều khiển giao thông thay vì đèn.
+
+<img src="guideline_images/case01_police.png" width="100%">
+
+*Đã gán nhãn trên CVAT — đèn bị che khuất nên `state=unknown`, và vì có cảnh sát đang ra hiệu lệnh nên `relevance=not_relevant`.*
+
+### Ảnh case 2 — Nhiều đèn cùng hướng
+
+- **Tình huống:** Cùng một hướng đi có từ 2 đèn trở lên (đèn chính + đèn lặp lại), ví dụ một đèn treo bên trái và một đèn bên phải đường (`TEAM01`, ảnh gốc `1.png`).
+- **Cách gán:** **LABEL** riêng từng đèn, mỗi đèn 1 box; các đèn cùng hướng phải có cùng `state` và cùng `relevance` với xe mình.
+- **Lý do:** Các đèn này cùng điều khiển một hướng nên luôn đổi màu cùng lúc — nếu hai đèn khác màu hoặc khác relevance thì có một đèn bị gán sai.
+
+<img src="guideline_images/case02_TEAM01_same_direction.png" width="100%">
+
+*Đã gán nhãn trên CVAT — 1 đèn treo bên trái, 1 đèn trên cần đèn bên phải, cùng hướng.*
+
+### Ảnh case 3 — Hộp đèn tối
+
+- **Tình huống:** Hộp đèn tối, không phát sáng: **(a)** đèn đang được sửa chữa — có xe cẩu và công nhân làm việc ngay dưới giàn đèn (ảnh gốc `24.png`); **(b)** đèn chưa được lắp đặt — cụm đèn trên rơ-moóc đang được chở tới nơi lắp đặt (`TEAM25`, ảnh gốc `29.png`).
+- **Cách gán:** **LABEL** — vẫn vẽ bbox quanh vỏ đèn và gán `state=off`. Chỉ dùng `unknown` khi không nhìn rõ được (bị che, quá xa, quá mờ). Với (b), đèn không điều khiển giao thông tại vị trí đó nên `relevance=not_relevant`.
+- **Lý do:** Đèn tắt là một trạng thái thật, khác với "không biết màu" — không tự đoán màu cho đèn tắt.
+
+**(a) Đèn đang được sửa chữa**
+
+<img src="guideline_images/case03a_maintenance_off.png" width="100%">
+
+**(b) Đèn chưa được lắp đặt**
+
+<img src="guideline_images/case03b_trailer_off.png" width="100%">
+
+### Ảnh case 4 — Đèn bị đổi màu khi thu vào camera
+
+- **Tình huống:** Màu đèn hiển thị trên ảnh khác với các màu tín hiệu (đỏ, vàng, xanh), ví dụ ban đêm đèn ngả sang xanh dương/xanh ngọc.
+- **Cách gán:** **LABEL** — vẫn vẽ box, vẫn là `traffic_light`, nhưng `state=unknown` và `evidence` ghi rõ "màu bị camera làm lệch".
+- **Lý do:** Màu hiển thị không đủ để xác định đèn đang ở trạng thái nào.
+
+*Chưa có ảnh — cần một ảnh ban đêm không thuộc split blind.*
+
+### Ảnh case 5 — Giao lộ có ≥2 cột
+
+- **Tình huống:** Giao lộ có từ 2 cột đèn trở lên: một cột cho làn của ego, một cột cho làn cắt ngang (`TEAM04`, ảnh gốc `4.png`).
+- **Cách gán:** **LABEL** cả 2 đèn, `relevance` khác nhau theo làn của ego — đây là decision **critical**.
+- **Lý do:** Gán nhầm đèn của làn khác thành `relevant_to_ego` (hoặc ngược lại) khiến xe dừng nhầm hoặc đi sai lúc đèn đỏ.
+
+<img src="guideline_images/case06_TEAM04_multi_pole.png" width="100%">
 
 ## 10. Common mistakes (checklist tự chấm trước khi nộp)
 
