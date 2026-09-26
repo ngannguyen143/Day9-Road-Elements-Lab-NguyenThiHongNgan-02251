@@ -57,7 +57,7 @@ Diversity: conflicting road elements / multi-head.
 ---
 
 CASE ID: EC04
-Sample: TEAM06 (blind)
+Sample: TEAM06 (example)
 Scene: Ban ngày, đường dân cư — đèn xe bị mép trên khung hình cắt; trên cột bên trái có hộp đèn người đi bộ hình bàn tay.
 Observation: Đèn xe chỉ thấy phần dưới vỏ, không thấy lens đang sáng; hộp đèn bên trái trông giống đèn tín hiệu nhưng là đèn người đi bộ.
 Decision: UNKNOWN cho đèn xe (vẫn vẽ box, `state=unknown`, `relevance=relevant_to_ego`, `evidence` ghi truncation); IGNORE đèn người đi bộ.
@@ -85,7 +85,7 @@ Diversity: ambiguous semantics (ranh giới định nghĩa object).
 ---
 
 CASE ID: EC06
-Sample: TEAM09 (blind)
+Sample: TEAM09 (example)
 Scene: Ban đêm, đèn màu cam nằm cạnh biển "People are crossing"; phía trước có 2 đèn xanh của hướng ego.
 Observation: Đốm sáng màu cam trông giống đèn đỏ của xe, nhưng màu cam và vị trí cạnh lối qua đường cho thấy đây là đèn bàn tay cho người đi bộ.
 Decision: IGNORE đèn cam; LABEL 2 đèn xanh (`state=green`, `relevance=relevant_to_ego`).

@@ -83,3 +83,33 @@ LISA27,data/lisa/LISA27.jpg,lisa,dayClip5--01632.jpg,dayClip5 frame 1632,1280,96
 LISA28,data/lisa/LISA28.jpg,lisa,dayClip5--01633.jpg,dayClip5 frame 1633,1280,960,,,
 LISA29,data/lisa/LISA29.jpg,lisa,dayClip5--01634.jpg,dayClip5 frame 1634,1280,960,,,
 LISA30,data/lisa/LISA30.jpg,lisa,dayClip5--01635.jpg,dayClip5 frame 1635,1280,960,,,
+TEAM01,data/data_team/TEAM01.png,data_team,1.png,,1280,720,clear,dusk,city street - thoroughfare with shops
+TEAM02,data/data_team/TEAM02.png,data_team,2.png,,1280,720,snow,daytime,"city street (E 22 St, wet/snow)"
+TEAM03,data/data_team/TEAM03.png,data_team,3.png,,1115,835,clear,dusk,"intersection (multi-head, arrow+round)"
+TEAM04,data/data_team/TEAM04.png,data_team,4.png,,1100,822,clear,dusk,"intersection (same corner as TEAM03, later moment)"
+TEAM05,data/data_team/TEAM05.png,data_team,5.png,,640,480,clear,daytime,commercial strip intersection (multi-head)
+TEAM06,data/data_team/TEAM06.png,data_team,6.png,,1280,720,clear,daytime,residential tree-lined street
+TEAM07,data/data_team/TEAM07.png,data_team,7.png,,1280,720,rain,daytime,airport terminal curbside lane
+TEAM08,data/data_team/TEAM08.png,data_team,8.png,,1280,720,clear,night,city street under overpass
+TEAM09,data/data_team/TEAM09.png,data_team,9.png,,1280,720,clear,night,city street under overpass (continued)
+TEAM10,data/data_team/TEAM10.png,data_team,12.png,,1280,720,rain,dusk,"city street, no traffic light visible"
+TEAM11,data/data_team/TEAM11.png,data_team,13.png,,1280,720,rain,daytime,NYC avenue intersection
+TEAM12,data/data_team/TEAM12.png,data_team,14.png,,1280,720,snow,daytime,NYC street (Greenwich St)
+TEAM13,data/data_team/TEAM13.png,data_team,15.png,,1280,720,snow,daytime,NYC street (Fifth Ave South area)
+TEAM14,data/data_team/TEAM14.png,data_team,16.png,,1280,720,clear,dusk,street facing sunset glare
+TEAM15,data/data_team/TEAM15.png,data_team,17.png,,1280,720,clear,night,"intersection, two directions"
+TEAM16,data/data_team/TEAM16.png,data_team,18.png,,1280,720,overcast,daytime,street with school bus
+TEAM17,data/data_team/TEAM17.png,data_team,19.png,,1280,720,rain,daytime,"SF street, bus partial occlusion"
+TEAM18,data/data_team/TEAM18.png,data_team,20.png,,1280,720,clear,dusk,"NYC avenue, construction cones"
+TEAM19,data/data_team/TEAM19.png,data_team,21.png,,1280,720,clear,night,Queens avenue (50 Ave)
+TEAM20,data/data_team/TEAM20.png,data_team,22.png,,1280,720,clear,night,"tunnel interior, lane-control lights"
+TEAM21,data/data_team/TEAM21.png,data_team,25.png,,1280,720,clear,daytime,NYC Fifth Ave intersection
+TEAM22,data/data_team/TEAM22.png,data_team,26.png,,1338,732,overcast,daytime,Queens residential/commercial street
+TEAM23,data/data_team/TEAM23.png,data_team,27.png,,1280,720,clear,night,"city street, mast-arm lights"
+TEAM24,data/data_team/TEAM24.png,data_team,28.png,,2016,1512,clear,daytime,campus crosswalk (pedestrian beacon only)
+TEAM25,data/data_team/TEAM25.png,data_team,29.png,,516,387,rain,night,"city street, rainy windshield, blurred red + green lights"
+TEAM26,data/data_team/TEAM26.png,data_team,30.png,,639,480,overcast,daytime,"rural road, portable trailer light unit (lights off)"
+TEAM27,data/data_team/TEAM27.png,data_team,31.png,,408,612,rain,night,"city street, close windshield view"
+TEAM28,data/data_team/TEAM28.png,data_team,32.png,,399,501,rain,night,"European city street, wet reflections"
+TEAM29,data/data_team/TEAM29.png,data_team,10.png,,450,300,clear,daytime,"city intersection, third-person photo, red straight-arrow light"
+TEAM30,data/data_team/TEAM30.png,data_team,23.png,,259,194,clear,daytime,"Vietnam intersection with countdown displays, third-person photo"

@@ -1,8 +1,8 @@
 CVAT task reference — thay mọi placeholder mới là xong.
 
-CVAT version: TODO
-Task calibration (tên, id): TODO
-Task bản cuối theo guideline v3 (tên, id) hoặc lý do không có: TODO
-File export đã nộp (đường dẫn trong repo): TODO
-Guideline version dán trong Guide của task: TODO
-Ghi chú cho người tiếp nhận: TODO
+CVAT version: 2.75.1
+Task calibration (tên, id): khungdien-calib-v2 (job 19), 8 ảnh TEAM* trong build/calibration/; calibration đo trên 4 ảnh TEAM03/04/05/07
+Task bản cuối theo guideline v3 (tên, id) hoặc lý do không có: chưa có — v3 hoàn thành sau blind test, sát hạn nộp nên nhóm chưa tạo task mới để label lại theo v3
+File export đã nộp (đường dẫn trong repo): project/06_calibration_exports/thinh.zip, project/06_calibration_exports/ngan.zip (calibration); project/team_exports/*.zip (label toàn bộ data_team của các thành viên); project/07_blind_handoff/peer_output/dongtinh-blind.zip (bài blind của nhóm Đồng tình)
+Guideline version dán trong Guide của task: v2 (bản đã freeze, dùng cho calibration và blind test)
+Ghi chú cho người tiếp nhận: export bằng CVAT for images 1.1, tắt Save images; tên ảnh phải là sample_id (TEAM01–TEAM30, xem cột original_name trong data/catalog.csv). Gold có 3 lỗi đã ghi ở peer_feedback.md — sửa gold rồi make freeze REFREEZE=1 trước khi dùng lại.

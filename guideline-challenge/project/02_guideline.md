@@ -1,6 +1,6 @@
 # Guideline — Traffic Light Annotation
 
-**Version:** v2
+**Version:** v3
 
 <!--
 v2 hiện tại. Đổi dòng Version thành v3 sau blind handoff (mục 7 README); mỗi lần tăng version ghi một dòng vào
@@ -33,6 +33,8 @@ No hidden rules: rule chỉ giải thích bằng miệng thì coi như không t�
 
 ## 2. Annotation unit
 
+**Light head (mới ở v3):** một đầu đèn tín hiệu có vỏ riêng — thường là một hộp chứa 3 lens đỏ/vàng/xanh xếp dọc hoặc ngang, hoặc một hộp chỉ có mũi tên. Nhiều hộp gắn chung một giá/cột vẫn là nhiều light head.
+
 Đơn vị là **1 light head nhìn thấy được**. Một cột/gantry có N head (ví dụ 1 đèn tròn + 1 đèn mũi tên rẽ trái) → **N box riêng biệt**, mỗi box 1 head — **không gộp thành 1 box bao cả cụm** (pilot đã mắc đúng lỗi này, xem edge case EC-02).
 
 ## 3. Geometry rule
@@ -40,6 +42,8 @@ No hidden rules: rule chỉ giải thích bằng miệng thì coi như không t�
 Box bao sát viền light head/lamp housing nhìn thấy được, không lấy cột/giá đỡ. Ảnh tĩnh: Rectangle (Shape). Video/sequence: Rectangle (Track) để giữ object identity; đặt keyframe mới khi box hoặc state đổi rõ rệt, sau đó dùng **Attribute Annotation Mode** trong CVAT để gán state/relevance nhanh cho cả chuỗi thay vì sửa từng frame một.
 
 **Export format:** toàn bộ ảnh của project này là ảnh tĩnh, dùng **Shape** (không Track) — export task/job bằng **"CVAT for images 1.1"** (Actions → Export task dataset, hoặc trong job: Menu → Export job dataset), tắt "Save images". Không dùng "CVAT for video 1.1" vì format đó chỉ cần cho task có Track; dùng sai format khiến `make calib`/`make score` không đọc được ảnh trống hoặc báo lỗi thiếu `<image>`.
+
+**Vẽ box ban đêm (mới ở v3):** nhìn thấy vỏ đèn thì box ôm vỏ; chỉ thấy đốm sáng (không thấy vỏ) thì box ôm phần lens đang sáng, không ôm cả vùng lóa lan rộng xung quanh. Peer blind test hỏi đúng chỗ này ở `TEAM15`, `TEAM19`.
 
 ## 4. Taxonomy — class & attribute
 
@@ -115,6 +119,14 @@ Không dùng frame trước/sau để "bịa" ra màu của frame đang bị che
 3. Ego lane/hướng đi của frame này là gì: đi thẳng, rẽ trái, rẽ phải, merge, hay service lane?
 4. Đèn đó điều khiển ego lane hay đối tượng khác (pedestrian, bus, bicycle, cross street)? Nếu là đối tượng khác → `not_relevant`.
 5. Nếu vẫn thiếu bằng chứng sau 4 bước trên → `unknown_relevance`, không đoán.
+
+**Cách xác định làn/hướng của ego (mới ở v3, sau blind test — 2/3 critical sai đều do relevance):**
+
+- Ego là xe gắn camera, nằm ở giữa đáy ảnh (thường thấy nắp capo/kính lái). Làn ego là làn chạy thẳng từ giữa đáy ảnh về phía trước.
+- Đèn **quay mặt về camera** (thấy rõ lens) và treo phía trên hoặc phía trước làn ego → `relevant_to_ego`, dù đèn ở lề trái hay lề phải.
+- Các đèn cùng hướng (một treo trái, một treo phải) luôn cùng `state` và cùng `relevance` (ví dụ case 2, mục 9).
+- Đèn chỉ thấy cạnh hoặc lưng (quay ngang) → điều khiển hướng khác → `not_relevant`, `state=unknown`.
+- Ảnh không chụp từ trong xe (chụp từ vỉa hè, ảnh tư liệu) → không có làn ego → mọi đèn `unknown_relevance`.
 
 **Trường hợp đặc biệt — người điều khiển giao thông (mới, xem ảnh gốc `11.png` — cảnh sát điều khiển giao thông, chưa đưa vào `sample_pack.csv`):** nếu tại giao lộ có cảnh sát/người điều
 khiển giao thông đang ra hiệu lệnh, đèn tín hiệu vẫn `LABEL` theo đúng `state` đang sáng (đèn vẫn là vật thể thật,
@@ -211,6 +223,7 @@ Review theo cả chuỗi (sequence), không chấm từng frame độc lập —
 - [ ]  Có "bịa" state cho frame bị che dựa vào frame trước/sau không? (chỉ được xác nhận vị trí, không suy luận màu)
 - [ ]  Mọi giá trị `unknown`/`unknown_relevance` có kèm `evidence` giải thích lý do không? Trước khi export, lọc lại mọi box có `state` hoặc `relevance` là unknown mà `evidence` còn trống *(calibration: cả hai người đều bỏ trống)*.
 - [ ]  Còn box nào để `__undefined__` ở bất kỳ attribute nào không?
+- [ ]  Đã zoom 100% và đếm lại các đèn nhỏ ở xa chưa? *(blind test: peer bỏ sót 2/4 đèn ở một ảnh ban đêm)*
 - [ ]  Case chưa từng gặp (ví dụ dãy đèn liên tục trong hầm) có được ESCALATE thay vì tự quyết không?
 
 ---
@@ -221,3 +234,4 @@ Review theo cả chuỗi (sequence), không chấm từng frame độc lập —
 | ------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | v1      | Trước pilot                                                  | Schema cơ bản`state`+`relevance`+`direction`; chưa có ngưỡng occlusion; chưa có cây quyết định relevance; chưa phân biệt `off` thật với `unknown` do glare; chưa có rule ESCALATE riêng biệt với UNKNOWN                                                                                                                                                                                                                                                                    |
 | v2      | Sau khi 1 người ngoài nhóm pilot-test 3 ảnh demo bằng v1 | Thêm ngưỡng occlusion theo %; thêm cây quyết định relevance 5 bước (đưa nguyên vào guideline); thêm phân biệt`off` vs `unknown` do glare; thêm attribute `occluded` và `evidence`; thêm rule ESCALATE tách biệt khỏi UNKNOWN cho case chưa lường trước (đèn tạm); mở rộng inclusion/exclusion với ví dụ cụ thể pilot đã nhầm (phản chiếu, đèn hậu, đèn người đi bộ); mở rộng 5→10 ví dụ khớp edge case cards; thêm checklist tự chấm |
+| v3      | Sau blind test với nhóm Đồng tình (GTS 62.7) | Định nghĩa light head (mục 2); rule vẽ box ban đêm (mục 3); cách xác định làn/hướng ego + rule ảnh không chụp từ xe (mục 7); checklist đếm lại đèn nhỏ ở xa (mục 10) |

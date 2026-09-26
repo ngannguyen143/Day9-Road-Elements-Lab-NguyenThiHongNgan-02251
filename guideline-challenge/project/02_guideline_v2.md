@@ -16,7 +16,7 @@
 
 - **Trong phạm vi:** mọi đèn tín hiệu xe cơ giới nhìn thấy được, ở bất kỳ khoảng cách/góc nào, kể cả không áp dụng cho ego.
 - **Ngoài phạm vi** (không tạo box — pilot-test đã cho thấy đây là chỗ hay nhầm nhất, xem mục 10):
-  - Đèn người đi bộ/xe đạp — hình dạng icon người/xe đạp khác hẳn đèn tròn/mũi tên.
+  - Đèn người đi bộ — hình dạng icon người/xe đạp khác hẳn đèn tròn/mũi tên.
   - Đèn hậu xe (tail light) — dễ nhầm vào ban đêm vì cũng có màu đỏ sáng.
   - Phản chiếu đèn trên kính toà nhà, kính xe, hoặc biển quảng cáo LED — không có cột đèn vật lý tại vị trí đó.
   - Đèn đếm ngược hiển thị số giây — ngoài scope schema này.
@@ -35,14 +35,14 @@ Chỉ 1 class `traffic_light`. State/relevance/direction là attribute vì cùng
 
 **Ontology đầy đủ (phải khớp chính xác `03_ontology_and_cvat_setup.md`):**
 
-| Name | Geometry | Class/Attribute | Allowed values | Default | Mutable? | Rationale |
-|---|---|---|---|---|---|---|
-| `traffic_light` | Rectangle | Class | — | — | — | Duy nhất 1 class, tránh nổ taxonomy |
-| `state` | — | Attribute | red / yellow / green / off / unknown | unknown | Có | Đổi theo frame; downstream cần biết đèn đang "nói" gì |
-| `relevance` | — | Attribute | relevant_to_ego / not_relevant / unknown_relevance | unknown_relevance | Có | Quyết định critical nhất — đèn có điều khiển ego không |
-| `direction` | — | Attribute | round / arrow_left / arrow_right / arrow_straight / unknown | unknown | Ít đổi hơn state | Hình dạng lens quyết định ego được rẽ/đi thẳng theo tín hiệu nào |
-| `occluded` | — | Attribute | none / partial / heavy | none | Có | Cờ mức độ che, phục vụ QC & ngưỡng escalate (mới ở v2) |
-| `evidence` | — | Attribute (text ngắn) | tự do | "" | Có | Bắt buộc điền khi `state`/`relevance` = unknown, để reviewer hiểu vì sao (mới ở v2) |
+| Name            | Geometry  | Class/Attribute        | Allowed values                                              | Default           | Mutable?             | Rationale                                                                                    |
+| --------------- | --------- | ---------------------- | ----------------------------------------------------------- | ----------------- | -------------------- | -------------------------------------------------------------------------------------------- |
+| `traffic_light` | Rectangle | Class                  | —                                                          | —                | —                   | Duy nhất 1 class, tránh nổ taxonomy                                                       |
+| `state`         | —        | Attribute              | red / yellow / green / off / unknown                        | unknown           | Có                  | Đổi theo frame; downstream cần biết đèn đang "nói" gì                               |
+| `relevance`     | —        | Attribute              | relevant_to_ego / not_relevant / unknown_relevance          | unknown_relevance | Có                  | Quyết định critical nhất — đèn có điều khiển ego không                           |
+| `direction`     | —        | Attribute              | round / arrow_left / arrow_right / arrow_straight / unknown | unknown           | Ít đổi hơn state | Hình dạng lens quyết định ego được rẽ/đi thẳng theo tín hiệu nào               |
+| `occluded`      | —        | Attribute              | none / partial / heavy                                      | none              | Có                  | Cờ mức độ che, phục vụ QC & ngưỡng escalate (mới ở v2)                             |
+| `evidence`      | —        | Attribute (text ngắn) | tự do                                                      | ""                | Có                  | Bắt buộc điền khi`state`/`relevance` = unknown, để reviewer hiểu vì sao (mới ở v2) |
 
 **Ghi chú tương thích với DTLD:** bản gốc DTLD tách riêng `pictogram` (circle/arrow/pedestrian/bicycle…) với `orientation` (bố trí vật lý của đèn: vertical/horizontal), và dùng `relevant/not_relevant/unknown` cho relevance. Nhóm gộp `pictogram` vào attribute `direction` (round/arrow_*) vì bài này không cần phân biệt orientation vật lý, và đổi `relevant` → `relevant_to_ego` cho rõ nghĩa hơn với người đọc ngoài nhóm. Khi so với GT gốc DTLD: **không remap state trước** — đọc đúng vocabulary trong JSON v2 của DTLD (có cả state chuyển tiếp như `red-yellow`), chỉ map sang schema project này sau, bằng bảng mapping có ghi version.
 
@@ -55,8 +55,8 @@ Chỉ 1 class `traffic_light`. State/relevance/direction là attribute vì cùng
 **Mới ở v2** — pilot cho thấy v1 thiếu ngưỡng số cụ thể, mỗi người tự đoán "che nhiều" khác nhau:
 
 | Mức che | Hành động |
-|---|---|
-| < 50% diện tích light head | Vẫn xác định màu bình thường; gán `occluded=partial` nếu có che dù nhẹ |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
+| < 50% diện tích light head | Vẫn xác định màu bình thường; gán`occluded=partial` nếu có che dù nhẹ |
 | 50–90% | `state=unknown`, `occluded=partial`, ghi lý do vào `evidence` |
 | ≥ 90% (chỉ còn thấy viền hộp, không thấy màu) | `state=unknown`, `occluded=heavy`; nếu không xác định được cả vị trí chính xác → **ESCALATE** thay vì tự vẽ box đoán |
 
@@ -75,11 +75,11 @@ Không dùng frame trước/sau để "bịa" ra màu của frame đang bị che
 4 loại quyết định và cách **bắt buộc** thể hiện trong CVAT export — quyết định nào không hiện trong export thì không chấm được:
 
 | Quyết định | Ý nghĩa | Thể hiện trong CVAT |
-|---|---|---|
-| **LABEL** | Đủ bằng chứng, gán bình thường | Box + `state`/`relevance`/`direction` cụ thể (không phải unknown) |
+| ------------- | -------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| **LABEL** | Đủ bằng chứng, gán bình thường | Box +`state`/`relevance`/`direction` cụ thể (không phải unknown) |
 | **IGNORE** | Đối tượng ngoài scope (mục 1, 5) | Không tạo box — object không xuất hiện trong export |
-| **UNKNOWN** | Có object thật, thiếu bằng chứng 1 attribute | Box vẫn có; attribute tương ứng = `unknown`/`unknown_relevance`; `evidence` ghi lý do |
-| **ESCALATE** | Case guideline chưa lường trước (ví dụ đèn tạm/di động — xem EC-10) | Box tạm + `evidence` ghi rõ "ESCALATE: <lý do>" + 1 dòng trong decision log, chờ team lead quyết ở lần cập nhật guideline tiếp theo |
+| **UNKNOWN** | Có object thật, thiếu bằng chứng 1 attribute | Box vẫn có; attribute tương ứng =`unknown`/`unknown_relevance`; `evidence` ghi lý do |
+| **ESCALATE** | Case guideline chưa lường trước (ví dụ đèn tạm/di động — xem EC-10) | Box tạm +`evidence` ghi rõ "ESCALATE: <lý do>" + 1 dòng trong decision log, chờ team lead quyết ở lần cập nhật guideline tiếp theo |
 
 ## 8. Temporal rule
 
@@ -93,35 +93,35 @@ Review theo cả chuỗi (sequence), không chấm từng frame độc lập —
 
 ## 9. Examples (10 ảnh demo — khớp `04_edge_cases/edge_case_cards.md`)
 
-| # | Tình huống | Quyết định |
-|---|---|---|
-| 1 | Đèn phản chiếu trên kính toà nhà/biển LED, không có cột thật | **IGNORE** — không box |
-| 2 | 1 cột có 2 head (round + arrow) | **LABEL** 2 box riêng, direction khác nhau |
-| 3 | Đèn xa >50m, vài pixel, không phân biệt được màu | **LABEL**, `state=unknown` |
-| 4 | Bị cây/xe tải che ~60% | **LABEL**, `state=unknown`, `occluded=partial` |
-| 5 | Giao lộ có ≥2 cột: 1 cho làn ego, 1 cho làn cắt ngang | **LABEL** cả 2, `relevance` khác nhau theo làn ego — **critical** |
-| 6 | Đèn `arrow_left` đặt cạnh đèn `round` | **LABEL** riêng, direction theo hình dạng lens, không theo state |
-| 7 | Đèn đang chuyển trạng thái / motion blur | **LABEL** theo màu chiếm ưu thế (>50% diện tích); không chắc → `unknown` |
-| 8 | Đèn người đi bộ gần cụm đèn xe cơ giới | **IGNORE** — ngoài scope |
-| 9 | Đèn không sáng màu nào: hỏng thật hay do chói nắng? | `off` nếu chắc chắn không hoạt động; `unknown` nếu nghi ngờ do glare |
-| 10 | Đèn tạm/di động tại công trường thi công | **ESCALATE** |
+| #  | Tình huống                                                              | Quyết định                                                                     |
+| -- | ------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| 1  | Đèn phản chiếu trên kính toà nhà/biển LED, không có cột thật | **IGNORE** — không box                                                          |
+| 2  | 1 cột có 2 head (round + arrow)                                         | **LABEL** 2 box riêng, direction khác nhau                                      |
+| 3  | Đèn xa >50m, vài pixel, không phân biệt được màu                | **LABEL**, `state=unknown`                                                        |
+| 4  | Bị cây/xe tải che ~60%                                                 | **LABEL**, `state=unknown`, `occluded=partial`                                    |
+| 5  | Giao lộ có ≥2 cột: 1 cho làn ego, 1 cho làn cắt ngang              | **LABEL** cả 2, `relevance` khác nhau theo làn ego — **critical**             |
+| 6  | Đèn`arrow_left` đặt cạnh đèn `round`                               | **LABEL** riêng, direction theo hình dạng lens, không theo state              |
+| 7  | Đèn đang chuyển trạng thái / motion blur                            | **LABEL** theo màu chiếm ưu thế (>50% diện tích); không chắc → `unknown` |
+| 8  | Đèn người đi bộ gần cụm đèn xe cơ giới                        | **IGNORE** — ngoài scope                                                        |
+| 9  | Đèn không sáng màu nào: hỏng thật hay do chói nắng?             | `off` nếu chắc chắn không hoạt động; `unknown` nếu nghi ngờ do glare     |
+| 10 | Đèn tạm/di động tại công trường thi công                        | **ESCALATE**                                                                      |
 
 ## 10. Common mistakes (checklist tự chấm trước khi nộp)
 
-- [ ] Có gán nhầm đèn của làn khác thành `relevant_to_ego` không? *(lỗi trọng yếu nhất theo QA — nghiêm trọng hơn box lệch vài pixel)*
-- [ ] Có đoán state khi có cả đèn tròn + đèn mũi tên cùng lúc, thay vì tách 2 box riêng không?
-- [ ] Có lỡ box nhầm phản chiếu / đèn hậu / đèn người đi bộ (out-of-scope) không?
-- [ ] Có gộp nhiều light head vào 1 box thay vì tách riêng không?
-- [ ] Có gán `off` cho trường hợp thực ra là chói nắng (đáng lẽ là `unknown`) không?
-- [ ] Có "bịa" state cho frame bị che dựa vào frame trước/sau không? (chỉ được xác nhận vị trí, không suy luận màu)
-- [ ] Mọi giá trị `unknown`/`unknown_relevance` có kèm `evidence` giải thích lý do không?
-- [ ] Case chưa từng gặp (ví dụ đèn tạm) có được ESCALATE thay vì tự quyết không?
+- [ ]  Có gán nhầm đèn của làn khác thành `relevant_to_ego` không? *(lỗi trọng yếu nhất theo QA — nghiêm trọng hơn box lệch vài pixel)*
+- [ ]  Có đoán state khi có cả đèn tròn + đèn mũi tên cùng lúc, thay vì tách 2 box riêng không?
+- [ ]  Có lỡ box nhầm phản chiếu / đèn hậu / đèn người đi bộ (out-of-scope) không?
+- [ ]  Có gộp nhiều light head vào 1 box thay vì tách riêng không?
+- [ ]  Có gán `off` cho trường hợp thực ra là chói nắng (đáng lẽ là `unknown`) không?
+- [ ]  Có "bịa" state cho frame bị che dựa vào frame trước/sau không? (chỉ được xác nhận vị trí, không suy luận màu)
+- [ ]  Mọi giá trị `unknown`/`unknown_relevance` có kèm `evidence` giải thích lý do không?
+- [ ]  Case chưa từng gặp (ví dụ đèn tạm) có được ESCALATE thay vì tự quyết không?
 
 ---
 
 **Lịch sử phiên bản**
 
-| Version | Thời điểm | Thay đổi chính |
-|---|---|---|
-| v1 | Trước pilot | Schema cơ bản `state`+`relevance`+`direction`; chưa có ngưỡng occlusion; chưa có cây quyết định relevance; chưa phân biệt `off` thật với `unknown` do glare; chưa có rule ESCALATE riêng biệt với UNKNOWN |
-| v2 | Sau khi 1 người ngoài nhóm pilot-test 3 ảnh demo bằng v1 | Thêm ngưỡng occlusion theo %; thêm cây quyết định relevance 5 bước (đưa nguyên vào guideline); thêm phân biệt `off` vs `unknown` do glare; thêm attribute `occluded` và `evidence`; thêm rule ESCALATE tách biệt khỏi UNKNOWN cho case chưa lường trước (đèn tạm); mở rộng inclusion/exclusion với ví dụ cụ thể pilot đã nhầm (phản chiếu, đèn hậu, đèn người đi bộ); mở rộng 5→10 ví dụ khớp edge case cards; thêm checklist tự chấm |
+| Version | Thời điểm                                                   | Thay đổi chính                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| ------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| v1      | Trước pilot                                                  | Schema cơ bản`state`+`relevance`+`direction`; chưa có ngưỡng occlusion; chưa có cây quyết định relevance; chưa phân biệt `off` thật với `unknown` do glare; chưa có rule ESCALATE riêng biệt với UNKNOWN                                                                                                                                                                                                                                                                    |
+| v2      | Sau khi 1 người ngoài nhóm pilot-test 3 ảnh demo bằng v1 | Thêm ngưỡng occlusion theo %; thêm cây quyết định relevance 5 bước (đưa nguyên vào guideline); thêm phân biệt`off` vs `unknown` do glare; thêm attribute `occluded` và `evidence`; thêm rule ESCALATE tách biệt khỏi UNKNOWN cho case chưa lường trước (đèn tạm); mở rộng inclusion/exclusion với ví dụ cụ thể pilot đã nhầm (phản chiếu, đèn hậu, đèn người đi bộ); mở rộng 5→10 ví dụ khớp edge case cards; thêm checklist tự chấm |

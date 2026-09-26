@@ -48,13 +48,10 @@ Bốn loại decision, mỗi loại phải thấy được trong file export CVA
 ## Dữ liệu và giới hạn
 
 - **Nguồn ảnh:** `data_team` — 32 ảnh do nhóm tự chụp/sưu tầm (thay cho `bdd100k`/`lisa` dùng thử ban đầu). Đã
-  khảo sát toàn bộ 32 ảnh, đăng ký 28 ảnh vào `data/catalog.csv` (`TEAM01`–`TEAM28`); 15 ảnh trong số đó được
-  dùng trong `project/sample_pack.csv` (3 example, 4 calibration, 4 blind), số còn lại giữ lại trong catalog làm
+  khảo sát toàn bộ 32 ảnh, đăng ký 30 ảnh vào `data/catalog.csv` (`TEAM01`–`TEAM30`); 15 ảnh trong số đó được
+  dùng trong `project/sample_pack.csv` (5 example, 4 calibration, 5 blind), số còn lại giữ lại trong catalog làm
   nguồn dự phòng cho v3/gold sau này.
-- **4 ảnh bị loại khỏi catalog (không dùng):** các ảnh gốc `10.png`, `11.png`, `23.png`, `24.png` là ảnh chụp
-  góc nhìn người thứ ba/tư liệu đường phố (không phải góc nhìn từ trong xe — ego-vehicle), không đại diện cho
-  input mà module ADAS/ego-vehicle perception thực sự nhận được (khác hẳn về góc máy, chiều cao camera, chuyển
-  động so với dashcam) → loại khỏi catalog thay vì gán tag để tránh làm lệch phân bố dữ liệu huấn luyện/kiểm thử.
+- **Ảnh chụp góc người thứ ba:** `10.png`, `23.png` (nay là `TEAM29`, `TEAM30`, thuộc blind theo GT của nhóm) và `11.png`, `24.png` (dùng làm ảnh minh hoạ case 1, 3a trong guideline) không phải góc nhìn từ trong xe; nhóm vẫn dùng vì chúng kiểm tra đúng các rule khó (bảng đếm ngược, cảnh sát điều khiển, đèn đang sửa), và gán `unknown_relevance` khi không xác định được làn ego.
 - **Giới hạn đã biết:** `TEAM03`/`TEAM04` là cùng một giao lộ chụp cách nhau ít khoảnh khắc (đèn round chuyển từ
   đỏ sang xanh) — cả hai chỉ dùng trong `calibration`, không đưa sang `blind`, để tránh lộ đáp án qua trùng cảnh.
   Một số ảnh (`TEAM07` đèn kiểm soát làn sân bay, `TEAM20` đèn trong hầm, `TEAM26` đèn di động trên rơ-moóc) là

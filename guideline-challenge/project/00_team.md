@@ -6,7 +6,7 @@
 - **Nhóm peer test bài của mình:** Tôi đồng tình (cặp A ↔ B)
 - **Nhóm mình test bài của:** Tôi đồng tình
 - **Problem family:** Traffic-light state + ego relevance tại giao lộ có nhiều đầu đèn (xem `01_problem_statement.md`)
-- **Nguồn ảnh:** `data_team` — ảnh nhóm tự thu thập trong `data/data_team/`, đăng ký trong `data/catalog.csv` với sample_id `TEAM01`–`TEAM28`
+- **Nguồn ảnh:** `data_team` — ảnh nhóm tự thu thập trong `data/data_team/`, đăng ký trong `data/catalog.csv` với sample_id `TEAM01`–`TEAM30`
 
 | Thành viên | GitHub | Vai trò chính | File phụ trách |
 |---|---|---|---|
