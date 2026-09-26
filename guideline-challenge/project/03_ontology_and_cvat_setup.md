@@ -33,8 +33,8 @@ Default có thể gây bias:
 - **Phiên bản CVAT:** 2.75.1 (theo xác nhận của thành viên đã setup; `make cvat-status` báo CVAT hiện không
   chạy tại thời điểm viết file này — chạy `docker compose start` trong thư mục CVAT rồi `make cvat-status` lại
   trước khi nộp để double-check số phiên bản khớp).
-- **Tên task calibration** (có version guideline, ví dụ `team07-calib-v1`): TODO — cần tên team ở `00_team.md`
-  (đang TODO) trước khi đặt tên task, ví dụ `<team>-calib-v2` (giữ đúng version guideline hiện tại là v2).
+- **Tên task calibration** (có version guideline): `khungdien-calib-v2` — task gồm 8 ảnh `TEAM*` trong
+  `build/calibration/`, label theo guideline v2 (job 19 trên CVAT).
 - **Guide của task đã dán `02_guideline.md`?** Chưa — task đã tạo (CVAT 2.75.1, Shape) nhưng chưa dán. Cần vào
   task → **Labels → Raw**, dán toàn bộ nội dung `03_cvat_labels.json`; và ở phần mô tả task (task description),
   dán toàn bộ nội dung `02_guideline.md` (v2) trước khi mời thành viên vào label calibration.
@@ -67,4 +67,9 @@ data, không tham gia setup task).
 
 | Người test | Ngày | Câu trả lời sai / phải hỏi lại | Chỗ vấp (thao tác CVAT hoặc rule khó hiểu) | Đã sửa gì sau test |
 |---|---|---|---|---|
-| TODO | TODO | TODO | TODO | TODO |
+| Nguyễn Thị Hồng Ngân | 26/09/2026 | Q2: để `direction=round` cho các đầu đèn rất nhỏ ở xa không nhìn rõ hình lens (đúng ra là `unknown`). Q3: 1 box còn `occluded=__undefined__`; để trống `evidence` dù gán `state=unknown`. Q1: vẽ box cho hộp đèn người đi bộ hình bàn tay (`6.png`), trong khi đèn người đi bộ thuộc loại ngoài scope | Không nhận ra attribute nào còn `__undefined__` vì CVAT không bắt buộc chọn; rule `evidence` bắt buộc chỉ nằm trong phần định nghĩa, dễ bỏ sót khi label nhanh; chưa phân biệt được đèn người đi bộ của Mỹ (hộp vuông, bàn tay cam) với đèn xe | Thêm rule đèn rất nhỏ/ở xa vào mục 5; thêm bước lọc box `unknown` thiếu `evidence` và box còn `__undefined__` vào checklist mục 10; gold `TEAM06`, `TEAM09` ghi rõ đèn người đi bộ là IGNORE |
+| Bùi Việt Nam | 26/09/2026 | Q3: 3 box ở `13.png` để cả 4 attribute `__undefined__`; ở `16.png` gán `state=yellow` nhưng `evidence` lại ghi "thấy một chấm màu xanh". Làm đúng: điền `evidence` cho 13/14 box `unknown`; không vẽ đèn đỏ người đi bộ ở `17.png`; dùng `state=unknown` cho đèn bị camera làm lệch màu | Vẽ box xong nhưng quên chọn attribute cho các box sau — CVAT không cảnh báo; đèn nhỏ ở xa khó phân biệt vàng với xanh | Như trên: checklist mục 10 thêm bước kiểm tra `__undefined__` trước khi export; rule đèn rất nhỏ/ở xa ở mục 5 (không đọc chắc màu thì `state=unknown`) |
+
+*Ghi chú: setup test được đánh giá qua bài label thật của hai bạn trên CVAT (`team_exports/ngan_anh01-10.zip`,
+`team_exports/nam_anh11-20.zip`, và calibration `06_calibration_exports/ngan.zip`) — đối chiếu từng box với đáp án
+chuẩn ở trên, thay vì phỏng vấn riêng 4 câu hỏi.*
