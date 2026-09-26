@@ -1,1 +1,7 @@
 sample_id,item,values_by_annotator,diagnosis,action,rule_change
+TEAM05,count,thinh=11 box; ngan=9 box (lệch ở các đầu đèn rất nhỏ ở xa trên giàn),guideline_gap,revise_rule,"Mục 5: vẽ box cho mọi vỏ đèn xe nhận ra được khi xem ảnh ở 100%, kể cả rất nhỏ và không đọc được màu (khi đó state/direction=unknown); chỉ bỏ qua chấm sáng không phân biệt được vỏ đèn"
+TEAM05,attr:direction,thinh=unknown cho 8 đèn nhỏ ở xa; ngan=round cho tất cả,execution_error,coaching,
+TEAM05,attr:relevance,thinh=2 đầu đèn relevant_to_ego; ngan=3 đầu đèn relevant_to_ego,data_ambiguity,add_example,
+TEAM05,attr:evidence,cả 2 người để trống evidence dù có 8–9 đèn state=unknown,execution_error,coaching,Mục 10: thêm bước tự kiểm trước khi export — lọc mọi box có state hoặc relevance là unknown mà evidence còn trống
+TEAM05,attr:occluded,ngan có 1 box để occluded=__undefined__,execution_error,coaching,
+TEAM07,count,thinh=4 box; ngan=3 box,data_ambiguity,add_example,

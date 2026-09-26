@@ -49,7 +49,7 @@ Bốn loại decision, mỗi loại phải thấy được trong file export CVA
 
 - **Nguồn ảnh:** `data_team` — 32 ảnh do nhóm tự chụp/sưu tầm (thay cho `bdd100k`/`lisa` dùng thử ban đầu). Đã
   khảo sát toàn bộ 32 ảnh, đăng ký 28 ảnh vào `data/catalog.csv` (`TEAM01`–`TEAM28`); 15 ảnh trong số đó được
-  dùng trong `project/sample_pack.csv` (3 example, 7 calibration, 5 blind), số còn lại giữ lại trong catalog làm
+  dùng trong `project/sample_pack.csv` (3 example, 4 calibration, 4 blind), số còn lại giữ lại trong catalog làm
   nguồn dự phòng cho v3/gold sau này.
 - **4 ảnh bị loại khỏi catalog (không dùng):** các ảnh gốc `10.png`, `11.png`, `23.png`, `24.png` là ảnh chụp
   góc nhìn người thứ ba/tư liệu đường phố (không phải góc nhìn từ trong xe — ego-vehicle), không đại diện cho
@@ -57,6 +57,6 @@ Bốn loại decision, mỗi loại phải thấy được trong file export CVA
   động so với dashcam) → loại khỏi catalog thay vì gán tag để tránh làm lệch phân bố dữ liệu huấn luyện/kiểm thử.
 - **Giới hạn đã biết:** `TEAM03`/`TEAM04` là cùng một giao lộ chụp cách nhau ít khoảnh khắc (đèn round chuyển từ
   đỏ sang xanh) — cả hai chỉ dùng trong `calibration`, không đưa sang `blind`, để tránh lộ đáp án qua trùng cảnh.
-  Một số ảnh (`TEAM07` đèn kiểm soát làn sân bay, `TEAM20` đèn trong hầm, `TEAM25` đèn di động trên rơ-moóc) là
+  Một số ảnh (`TEAM07` đèn kiểm soát làn sân bay, `TEAM20` đèn trong hầm, `TEAM26` đèn di động trên rơ-moóc) là
   thiết bị đèn không chuẩn (không phải cột đèn giao lộ 3 màu thông thường) — được xếp vào `calibration`/`blind`
   có chủ đích để kiểm tra việc áp dụng đúng ranh giới scope ở mục trên, không phải lỗi chọn data.

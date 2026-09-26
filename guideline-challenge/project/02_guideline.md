@@ -92,6 +92,8 @@ Chỉ 1 class `traffic_light`. State/relevance/direction là attribute vì cùng
 
 *(không đổi so với v1, chỉ thêm ví dụ cụ thể ở mục 9–10)* Không box: đèn người đi bộ/xe đạp, đèn hậu, phản chiếu, đèn đếm ngược. Có box: mọi đèn xe cơ giới nhìn thấy được kể cả không relevant cho ego (gán `not_relevant`, không phải bỏ qua).
 
+**Đèn rất nhỏ/ở xa (mới, sau calibration):** xem ảnh ở 100%; nhận ra được vỏ đèn thì vẫn vẽ box, kể cả không đọc được màu — khi đó `state=unknown`, `direction=unknown` và ghi `evidence`. Chỉ bỏ qua khi đó là một chấm sáng không phân biệt được vỏ đèn. Calibration `TEAM05` cho thấy hai người đếm lệch nhau 2 đèn ở đúng chỗ này.
+
 ## 6. Visibility / occlusion
 
 **Mới ở v2** — pilot cho thấy v1 thiếu ngưỡng số cụ thể, mỗi người tự đoán "che nhiều" khác nhau:
@@ -145,7 +147,7 @@ Review theo cả chuỗi (sequence), không chấm từng frame độc lập —
 |---|---|---|
 | 1 | Ngã tư có cả đèn tín hiệu và cảnh sát/người điều khiển giao thông đang ra hiệu lệnh (ảnh gốc `11.png`) | **LABEL** đèn theo đúng `state` đang sáng, nhưng `relevance=not_relevant` — người lái phải theo hiệu lệnh người điều khiển giao thông thay vì đèn |
 | 2 | Cùng một hướng đi có từ 2 đèn trở lên (đèn chính + đèn lặp lại, ví dụ một treo trái một treo phải) — `TEAM01`, ảnh gốc `1.png` | **LABEL** riêng từng đèn, mỗi đèn 1 box; các đèn cùng hướng phải cùng `state` và cùng `relevance` với xe mình. Lý do: các đèn này cùng điều khiển một hướng nên luôn đổi màu cùng lúc — nếu hai đèn khác màu hoặc khác relevance thì có một đèn bị gán sai |
-| 3 | Hộp đèn tối, không phát sáng: **(a)** đèn đang được sửa chữa — có xe cẩu và công nhân làm việc ngay dưới giàn đèn (ảnh gốc `24.png`); **(b)** đèn chưa được lắp đặt — cụm đèn trên rơ-moóc đang được chở tới nơi lắp đặt (`TEAM25`, ảnh gốc `29.png`) | **LABEL** — vẫn vẽ bbox quanh vỏ đèn và gán `state=off`. Chỉ dùng `unknown` khi không nhìn rõ được (bị che, quá xa, quá mờ). Với (b), đèn không điều khiển giao thông tại vị trí đó nên `relevance=not_relevant`. Lý do: đèn tắt là một trạng thái thật, khác với "không biết màu" — không tự đoán màu cho đèn tắt |
+| 3 | Hộp đèn tối, không phát sáng: **(a)** đèn đang được sửa chữa — có xe cẩu và công nhân làm việc ngay dưới giàn đèn (ảnh gốc `24.png`); **(b)** đèn chưa được lắp đặt — cụm đèn trên rơ-moóc đang được chở tới nơi lắp đặt (`TEAM26`, ảnh gốc `30.png`) | **LABEL** — vẫn vẽ bbox quanh vỏ đèn và gán `state=off`. Chỉ dùng `unknown` khi không nhìn rõ được (bị che, quá xa, quá mờ). Với (b), đèn không điều khiển giao thông tại vị trí đó nên `relevance=not_relevant`. Lý do: đèn tắt là một trạng thái thật, khác với "không biết màu" — không tự đoán màu cho đèn tắt |
 | 4 | Đèn bị đổi màu khi thu vào camera — màu hiển thị trên ảnh khác với các màu tín hiệu (đỏ, vàng, xanh), ví dụ ban đêm đèn ngả sang xanh dương/xanh ngọc | **LABEL** — vẫn vẽ box, vẫn là `traffic_light`, nhưng `state=unknown` và `evidence` ghi rõ "màu bị camera làm lệch". Lý do: màu hiển thị không đủ để xác định đèn đang ở trạng thái nào |
 | 5 | Giao lộ có ≥2 cột: 1 cho làn ego, 1 cho làn cắt ngang — `TEAM04`, ảnh gốc `4.png` | **LABEL** cả 2, `relevance` khác nhau theo làn ego — **critical** |
 
@@ -171,7 +173,7 @@ Review theo cả chuỗi (sequence), không chấm từng frame độc lập —
 
 ### Ảnh case 3 — Hộp đèn tối
 
-- **Tình huống:** Hộp đèn tối, không phát sáng: **(a)** đèn đang được sửa chữa — có xe cẩu và công nhân làm việc ngay dưới giàn đèn (ảnh gốc `24.png`); **(b)** đèn chưa được lắp đặt — cụm đèn trên rơ-moóc đang được chở tới nơi lắp đặt (`TEAM25`, ảnh gốc `29.png`).
+- **Tình huống:** Hộp đèn tối, không phát sáng: **(a)** đèn đang được sửa chữa — có xe cẩu và công nhân làm việc ngay dưới giàn đèn (ảnh gốc `24.png`); **(b)** đèn chưa được lắp đặt — cụm đèn trên rơ-moóc đang được chở tới nơi lắp đặt (`TEAM26`, ảnh gốc `30.png`).
 - **Cách gán:** **LABEL** — vẫn vẽ bbox quanh vỏ đèn và gán `state=off`. Chỉ dùng `unknown` khi không nhìn rõ được (bị che, quá xa, quá mờ). Với (b), đèn không điều khiển giao thông tại vị trí đó nên `relevance=not_relevant`.
 - **Lý do:** Đèn tắt là một trạng thái thật, khác với "không biết màu" — không tự đoán màu cho đèn tắt.
 
@@ -207,8 +209,9 @@ Review theo cả chuỗi (sequence), không chấm từng frame độc lập —
 - [ ]  Có gộp nhiều light head vào 1 box thay vì tách riêng không?
 - [ ]  Có gán `off` cho trường hợp thực ra là chói nắng (đáng lẽ là `unknown`) không?
 - [ ]  Có "bịa" state cho frame bị che dựa vào frame trước/sau không? (chỉ được xác nhận vị trí, không suy luận màu)
-- [ ]  Mọi giá trị `unknown`/`unknown_relevance` có kèm `evidence` giải thích lý do không?
-- [ ]  Case chưa từng gặp (ví dụ đèn tạm) có được ESCALATE thay vì tự quyết không?
+- [ ]  Mọi giá trị `unknown`/`unknown_relevance` có kèm `evidence` giải thích lý do không? Trước khi export, lọc lại mọi box có `state` hoặc `relevance` là unknown mà `evidence` còn trống *(calibration: cả hai người đều bỏ trống)*.
+- [ ]  Còn box nào để `__undefined__` ở bất kỳ attribute nào không?
+- [ ]  Case chưa từng gặp (ví dụ dãy đèn liên tục trong hầm) có được ESCALATE thay vì tự quyết không?
 
 ---
 
