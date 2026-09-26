@@ -1,1 +1,44 @@
-[]
+[
+  {
+    "name": "traffic_light",
+    "color": "#FB8C00",
+    "type": "rectangle",
+    "attributes": [
+      {
+        "name": "state",
+        "mutable": true,
+        "input_type": "select",
+        "default_value": "__undefined__",
+        "values": ["__undefined__", "red", "yellow", "green", "off", "unknown"]
+      },
+      {
+        "name": "relevance",
+        "mutable": true,
+        "input_type": "select",
+        "default_value": "__undefined__",
+        "values": ["__undefined__", "relevant_to_ego", "not_relevant", "unknown_relevance"]
+      },
+      {
+        "name": "direction",
+        "mutable": false,
+        "input_type": "select",
+        "default_value": "__undefined__",
+        "values": ["__undefined__", "round", "arrow_left", "arrow_right", "arrow_straight", "unknown"]
+      },
+      {
+        "name": "occluded",
+        "mutable": true,
+        "input_type": "select",
+        "default_value": "__undefined__",
+        "values": ["__undefined__", "none", "partial", "heavy"]
+      },
+      {
+        "name": "evidence",
+        "mutable": true,
+        "input_type": "text",
+        "default_value": "",
+        "values": [""]
+      }
+    ]
+  }
+]
