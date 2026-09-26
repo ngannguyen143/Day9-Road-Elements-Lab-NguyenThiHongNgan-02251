@@ -1,1 +1,12 @@
 sample_id,decision_id,expected,severity,rationale
+TEAM02,d1,label=traffic_light x2 (đèn bên trái và đèn giữa đường); state=green; relevance=relevant_to_ego cho cả 2,major,Hai đầu đèn xanh cùng điều khiển hướng đi của ego (Ngân label 2 box). Bỏ sót 1 đèn là thiếu object.
+TEAM02,d2,"geometry: box ôm sát vỏ từng đèn xanh, không lấy cần đèn/cột đèn",minor,"Theo Geometry rule ở 02_guideline.md mục 3, dung sai lệch ≤2px mỗi cạnh."
+TEAM02,d3,direction=round,minor,"Đèn tròn chuẩn, không có hình mũi tên trên lens — direction theo hình dạng lens, không theo hướng đi của ego."
+TEAM06,d1,"state=unknown; relevance=relevant_to_ego; evidence ghi rõ đèn bị mép trên khung hình cắt (truncation), không phải vật cản",major,"Chỉ thấy phần dưới vỏ đèn xe ở mép trên ảnh, không thấy lens đang sáng → không đủ căn cứ đọc màu; đèn nằm chính diện hướng đi của ego."
+TEAM06,d2,"label=traffic_light cho đèn xe ở mép trên ảnh (vẫn vẽ box quanh phần vỏ nhìn thấy, không bỏ qua vì bị cắt)",major,Đèn bị truncation vẫn là object trong scope — bỏ qua không vẽ box là lỗi thiếu object.
+TEAM06,d3,IGNORE: không vẽ box cho đèn người đi bộ (hộp đèn hình bàn tay) trên cột bên trái,major,"Đèn người đi bộ nằm ngoài scope (mục 1, 5 guideline); vẽ box cho nó là thừa object."
+TEAM09,d1,"IGNORE: đèn màu cam cạnh biển 'People are crossing' là đèn người đi bộ (bàn tay), không vẽ box",critical,"Đèn bàn tay cho người đi bộ có màu cam, dễ bị nhầm thành đèn đỏ của xe. Nếu vẽ box và gán relevant_to_ego, downstream sẽ dừng xe sai lúc đèn của ego đang xanh."
+TEAM09,d2,label=traffic_light x2 (2 đèn xanh chính diện ego); state=green; relevance=relevant_to_ego,major,Hai đèn xanh cùng điều khiển hướng đi của ego (Ngân label 2 box xanh relevant_to_ego).
+TEAM15,d1,"label=traffic_light x2; state=unknown cho cả 2 (màu bị camera làm ngả xanh dương); đèn bên phải relevance=relevant_to_ego, đèn bên trái relevance=unknown_relevance; evidence ghi lý do",major,"Theo ví dụ 4 mục 9 guideline: màu bị camera làm lệch thì state=unknown. Label của Hoàng và Nam đều cho đèn phải relevant_to_ego, đèn trái unknown_relevance."
+TEAM15,d2,"IGNORE: đèn đỏ nhỏ bên phải (có hình người đi bộ màu trắng ngay bên dưới) là đèn người đi bộ, không vẽ box",critical,"Nếu vẽ box và gán relevant_to_ego cho đèn đỏ này, downstream sẽ dừng xe sai dù đèn của ego không đỏ. Cả Hoàng và Nam đều không vẽ đèn này."
+TEAM15,d3,"geometry: box riêng cho từng light head, không gộp chung một box cho cả 2 đèn",minor,"Theo Annotation unit ở 02_guideline.md, mỗi light head nhìn thấy được là một box riêng."
