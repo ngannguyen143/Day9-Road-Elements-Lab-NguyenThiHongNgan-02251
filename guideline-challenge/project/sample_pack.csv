@@ -1,1 +1,12 @@
 sample_id,split,tags,reason
+TEAM01,example,normal,"Canonical: một đèn xanh rõ ràng, chạng vạng, một hướng duy nhất — ví dụ baseline cho decision LABEL/state=green."
+TEAM11,example,normal,"Canonical: đèn xanh ban ngày trời mưa, hai đầu đèn cùng đồng thuận — baseline cho điều kiện ướt/mưa nhẹ."
+TEAM16,example,normal,"Canonical: đèn đỏ ban ngày trời âm u, nhiều đầu đèn trên cùng một cột — baseline đọc đúng 3 đầu đèn chuẩn."
+TEAM03,calibration,edge,"Chạng vạng, red arrow_left + red round trên cùng cột — dạy cách gán direction riêng cho từng light head."
+TEAM04,calibration,edge;temporal,"Cùng giao lộ với TEAM03 nhưng đầu round đã chuyển sang green — dạy đọc đúng state theo từng ảnh, không suy diễn từ ảnh khác."
+TEAM05,calibration,edge,Giao lộ nhiều đầu đèn khác màu (đỏ/xanh tròn/xanh mũi tên) trên cùng cột — dạy phân biệt light head nào ứng với lane nào.
+TEAM07,calibration,edge;ambiguity,"Đèn kiểm soát làn tại khu vực đón/trả khách sân bay, không phải giao lộ chuẩn — dùng để thảo luận ranh giới 'đèn tín hiệu xe cơ giới' có tính cả đèn kiểm soát làn đặc thù hay không."
+TEAM02,blind,normal,"Giao lộ có tuyết, 2 đèn xanh cùng hướng ego — kiểm tra đếm đủ số đèn và baseline decision accuracy ở thời tiết khác example/calibration."
+TEAM06,blind,edge,"Đèn xe bị mép trên khung hình cắt + đèn người đi bộ trên cột bên trái — kiểm tra xử lý truncation (state=unknown, vẫn vẽ box) và bỏ qua đèn ngoài scope."
+TEAM09,blind,ambiguity;edge,Đèn màu cam cạnh biển 'People are crossing' dễ nhầm là đèn đỏ của xe nhưng thực ra là đèn người đi bộ — kiểm tra phân biệt loại thiết bị trước khi LABEL/IGNORE.
+TEAM15,blind,critical;edge,"Ban đêm, 2 đèn bị camera làm ngả xanh dương + 1 đèn đỏ người đi bộ bên phải — kiểm tra state=unknown khi màu bị lệch và IGNORE đèn người đi bộ; vẽ nhầm đèn đỏ thành relevant_to_ego là lỗi critical."
